@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /chat/
+Disallow: /call/
+Disallow: /my-consultations
+# Replace with your API origin (the API serves a live sitemap):
+Sitemap: https://api.your-domain.com/sitemap.xml

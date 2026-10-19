@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-cream font-sans text-slate-800 antialiased; }
+  h1, h2, h3, h4 { @apply font-display tracking-tight; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-gold { @apply btn bg-gradient-to-r from-gold-400 to-gold-500 text-night shadow-md hover:-translate-y-0.5 hover:shadow-gold disabled:hover:translate-y-0 disabled:hover:shadow-md; }
+  .btn-royal { @apply btn bg-royal-700 text-white hover:-translate-y-0.5 hover:bg-royal-800; }
+  .btn-outline { @apply btn border border-royal-300 bg-white text-royal-800 hover:bg-royal-50; }
+  .btn-light { @apply btn border border-white/30 text-white hover:bg-white/10; }
+  .input { @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-royal-500 focus:ring-2 focus:ring-royal-200; }
+  .field-error { @apply mt-1 text-xs text-red-600; }
+  .label { @apply mb-1 block text-sm font-medium text-slate-700; }
+  .chip { @apply inline-flex items-center rounded-full bg-royal-50 px-2.5 py-0.5 text-xs font-medium text-royal-800; }
+  .sky { background-color: #0e0a26;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,255,255,.9), transparent),
+      radial-gradient(1px 1px at 28% 68%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1.5px 1.5px at 44% 14%, rgba(241,212,129,.9), transparent),
+      radial-gradient(1px 1px at 63% 82%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 78% 30%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1px 1px at 90% 58%, rgba(241,212,129,.8), transparent),
+      radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.5), transparent),
+      linear-gradient(160deg, #0e0a26 0%, #2a1150 55%, #3f1a73 100%); }
+}
+
+@keyframes twinkle { 0%,100% { opacity: .25 } 50% { opacity: 1 } }
+.twinkle { animation: twinkle 3.2s ease-in-out infinite; }
