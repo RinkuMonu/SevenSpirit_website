@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://sevenspirit.in/api/v1';
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://sevenspirit.in';
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '');
 
 const api = axios.create({ baseURL: API_URL, timeout: 20000 });
