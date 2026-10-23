@@ -17,11 +17,11 @@ export default function Footer() {
         <div>
           <Link to="/" className="flex items-center gap-2 font-display text-2xl font-bold"><Sparkles className="text-gold-400" size={22} /> SevenSpirit</Link>
           <p className="mt-3 max-w-xs text-sm text-white/70">Private chat and call consultations with experienced astrologers, from anywhere.</p>
-          <div className="mt-4 flex gap-3">
+          {/* <div className="mt-4 flex gap-3">
             {[[Facebook, 'Facebook'], [Instagram, 'Instagram'], [Twitter, 'Twitter'], [Youtube, 'YouTube']].map(([Icon, label]) => (
               <a key={label} href="#" aria-label={label} className="rounded-full border border-white/20 p-2 text-white/80 hover:bg-white/10"><Icon size={16} /></a>
             ))}
-          </div>
+          </div> */}
         </div>
         {COL('Explore', [['/about', 'About'], ['/astrologers', 'Astrologers'], ['/services', 'Services'], ['/contact', 'Contact']])}
         {COL('Policies', [['/terms', 'Terms & Conditions'], ['/privacy', 'Privacy Policy'], ['/refund', 'Refund Policy'], ['/disclaimer', 'Disclaimer']])}

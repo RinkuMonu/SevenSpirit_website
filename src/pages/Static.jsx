@@ -333,10 +333,7 @@ export function Legal({ kind }) {
         {paras.map((p) => (
           <p key={p}>{p}</p>
         ))}
-        <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
-          Template text: have it reviewed by a legal professional and update
-          business details before launch.
-        </p>
+       
       </section>
     </>
   );
