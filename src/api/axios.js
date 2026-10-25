@@ -23,5 +23,13 @@ api.interceptors.response.use(
   }
 );
 
-export const errMsg = (e) => e?.response?.data?.message || e?.message || 'Something went wrong. Please try again.';
+export const errMsg = (e) => {
+  const data = e?.response?.data;
+  if (typeof data === 'string' && data) return data;
+  if (data?.message) return data.message;
+  if (data?.error) return data.error;
+  if (Array.isArray(data?.errors) && data.errors.length) return data.errors[0]?.msg || data.errors[0]?.message || data.errors[0];
+  if (data?.details) return data.details;
+  return e?.message || 'Something went wrong. Please try again.';
+};
 export default api;
