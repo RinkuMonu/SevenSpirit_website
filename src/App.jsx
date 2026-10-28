@@ -43,6 +43,7 @@ export default function App() {
             <Route path="/privacy" element={<Legal kind="privacy" />} />
             <Route path="/refund" element={<Legal kind="refund" />} />
             <Route path="/disclaimer" element={<Legal kind="disclaimer" />} />
+            <Route path="/cancellation" element={<Legal kind="cancellation" />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

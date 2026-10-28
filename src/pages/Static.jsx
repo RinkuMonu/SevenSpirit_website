@@ -101,7 +101,137 @@ export function About() {
   );
 }
 
+
+import { useState } from "react";
+import {
+  Send,
+  User,
+  MessageSquare,
+  LoaderCircle,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+
+// Keep your existing Seo and Hero imports
+
+const initialForm = {
+  name: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
+
+function validateForm(values) {
+  const errors = {};
+
+  if (!values.name.trim()) {
+    errors.name = "Name is required.";
+  } else if (values.name.trim().length < 2) {
+    errors.name = "Name must be at least 2 characters.";
+  } else if (values.name.trim().length > 80) {
+    errors.name = "Name cannot exceed 80 characters.";
+  } else if (!/^[\p{L}\p{M} .'-]+$/u.test(values.name.trim())) {
+    errors.name = "Please enter a valid name.";
+  }
+
+  if (!values.email.trim()) {
+    errors.email = "Email address is required.";
+  } else if (
+    values.email.length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email.trim())
+  ) {
+    errors.email = "Please enter a valid email address.";
+  }
+
+  if (!values.phone.trim()) {
+    errors.phone = "Phone number is required.";
+  } else if (!/^\+?[0-9\s()-]{10,20}$/.test(values.phone.trim())) {
+    errors.phone = "Please enter a valid phone number.";
+  } else if (values.phone.replace(/\D/g, "").length < 10 ||
+             values.phone.replace(/\D/g, "").length > 15) {
+    errors.phone = "Phone number must contain 10–15 digits.";
+  }
+
+  if (!values.subject.trim()) {
+    errors.subject = "Please enter a subject.";
+  } else if (values.subject.trim().length < 3) {
+    errors.subject = "Subject must be at least 3 characters.";
+  } else if (values.subject.trim().length > 120) {
+    errors.subject = "Subject cannot exceed 120 characters.";
+  }
+
+  if (!values.message.trim()) {
+    errors.message = "Message is required.";
+  } else if (values.message.trim().length < 10) {
+    errors.message = "Message must be at least 10 characters.";
+  } else if (values.message.trim().length > 2000) {
+    errors.message = "Message cannot exceed 2000 characters.";
+  }
+
+  return errors;
+}
+
 export function Contact() {
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle");
+  const [serverMessage, setServerMessage] = useState("");
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+
+    if (status !== "idle") {
+      setStatus("idle");
+      setServerMessage("");
+    }
+  };
+
+ 
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  const validationErrors = validateForm(form);
+  setErrors(validationErrors);
+
+  if (Object.keys(validationErrors).length > 0) {
+    setStatus("idle");
+    const firstError = Object.keys(validationErrors)[0];
+    document.getElementById(firstError)?.focus();
+    return;
+  }
+
+  setStatus("loading");
+  setServerMessage("");
+
+  // Frontend-only success simulation
+  setTimeout(() => {
+    setStatus("success");
+    setServerMessage(
+      "Thank you for contacting us! Your message has been submitted successfully."
+    );
+    setForm(initialForm);
+    setErrors({});
+  }, 500);
+};
+
+
+  const inputClass = (field) =>
+    `mt-2 w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:ring-2 ${
+      errors[field]
+        ? "border-red-400 focus:border-red-500 focus:ring-red-100"
+        : "border-slate-200 focus:border-royal-500 focus:ring-royal-100"
+    }`;
+
   return (
     <>
       <Seo
@@ -109,10 +239,13 @@ export function Contact() {
         description="Get in touch with the SevenSpirit support team."
         path="/contact"
       />
+
       <Hero
         title="Contact us"
         sub="Questions about a payment or a consultation? We reply within one working day."
       />
+
+      {/* Contact information */}
       <section className="container-x grid max-w-4xl gap-5 py-14 sm:grid-cols-3">
         {[
           [
@@ -128,29 +261,283 @@ export function Contact() {
             "3rd Floor, Plot No. 6-A, Okay Plus Big Benn Swag Farm, New Sanganer Road, Sundar Singh Bhandari Nagar, Ganesh Nagar, Ramnagar, Jaipur, Rajasthan – 302019, India.",
             null,
           ],
-        ].map(([Icon, l, v, href]) => (
+        ].map(([Icon, label, value, href]) => (
           <div
-            key={l}
+            key={label}
             className="rounded-2xl border border-royal-100 bg-white p-6 text-center"
           >
-            <Icon className="mx-auto text-gold-500" />
-            <h2 className="mt-2 text-2xl font-bold text-royal-900">{l}</h2>
+            <Icon className="mx-auto text-gold-500" size={26} />
+
+            <h2 className="mt-2 text-2xl font-bold text-royal-900">
+              {label}
+            </h2>
+
             {href ? (
               <a
                 href={href}
-                className="mt-1 block text-sm text-royal-700 hover:underline"
+                className="mt-1 block break-words text-sm text-royal-700 hover:underline"
               >
-                {v}
+                {value}
               </a>
             ) : (
-              <p className="mt-1 text-sm text-slate-600">{v}</p>
+              <p className="mt-1 break-words text-sm text-slate-600">
+                {value}
+              </p>
             )}
           </div>
         ))}
       </section>
+
+      {/* Contact form */}
+      <section className="container-x mx-auto max-w-4xl pb-16">
+        <div className="overflow-hidden rounded-3xl border border-royal-100 bg-white shadow-sm">
+          <div className="bg-royal-900 px-6 py-8 text-white sm:px-10">
+            <div className="mb-3 flex items-center gap-2 text-gold-400">
+              <MessageSquare size={22} />
+              <span className="text-sm font-semibold uppercase tracking-wider">
+                Get in touch
+              </span>
+            </div>
+
+            <h2 className="text-3xl font-bold">Send us a message</h2>
+
+            <p className="mt-2 text-sm leading-6 text-white/80">
+              Fill out the form below and our support team will get back to
+              you within one working day.
+            </p>
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="space-y-6 p-6 sm:p-10"
+          >
+            {status === "success" && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="flex gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+              >
+                <CheckCircle2 className="mt-0.5 shrink-0" size={20} />
+                <p>{serverMessage}</p>
+              </div>
+            )}
+
+            {status === "error" && (
+              <div
+                role="alert"
+                className="flex gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+              >
+                <AlertCircle className="mt-0.5 shrink-0" size={20} />
+                <p>{serverMessage}</p>
+              </div>
+            )}
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              {/* Name */}
+              <div>
+                <label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-royal-900"
+                >
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+
+                <div className="relative">
+                  <User
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                    maxLength={80}
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                    className={`${inputClass("name")} pl-10`}
+                  />
+                </div>
+
+                {errors.name && (
+                  <p id="name-error" className="mt-1 text-sm text-red-600">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-royal-900"
+                >
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+
+                <div className="relative">
+                  <Mail
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    maxLength={254}
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    className={`${inputClass("email")} pl-10`}
+                  />
+                </div>
+
+                {errors.email && (
+                  <p id="email-error" className="mt-1 text-sm text-red-600">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="text-sm font-semibold text-royal-900"
+                >
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+
+                <div className="relative">
+                  <Phone
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    value={form.phone}
+                    onChange={handleChange}
+                    placeholder="+91 98765 43210"
+                    maxLength={20}
+                    aria-invalid={Boolean(errors.phone)}
+                    aria-describedby={errors.phone ? "phone-error" : undefined}
+                    className={`${inputClass("phone")} pl-10`}
+                  />
+                </div>
+
+                {errors.phone && (
+                  <p id="phone-error" className="mt-1 text-sm text-red-600">
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
+
+              {/* Subject */}
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="text-sm font-semibold text-royal-900"
+                >
+                  Subject <span className="text-red-500">*</span>
+                </label>
+
+                <input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  value={form.subject}
+                  onChange={handleChange}
+                  placeholder="How can we help you?"
+                  maxLength={120}
+                  aria-invalid={Boolean(errors.subject)}
+                  aria-describedby={
+                    errors.subject ? "subject-error" : undefined
+                  }
+                  className={inputClass("subject")}
+                />
+
+                {errors.subject && (
+                  <p id="subject-error" className="mt-1 text-sm text-red-600">
+                    {errors.subject}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Message */}
+            <div>
+              <div className="flex items-center justify-between gap-2">
+                <label
+                  htmlFor="message"
+                  className="text-sm font-semibold text-royal-900"
+                >
+                  Your Message <span className="text-red-500">*</span>
+                </label>
+
+                <span className="text-xs text-slate-500">
+                  {form.message.length}/2000
+                </span>
+              </div>
+
+              <textarea
+                id="message"
+                name="message"
+                rows={6}
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Please describe your query in detail..."
+                maxLength={2000}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? "message-error" : undefined}
+                className={`${inputClass("message")} resize-y`}
+              />
+
+              {errors.message && (
+                <p id="message-error" className="mt-1 text-sm text-red-600">
+                  {errors.message}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-royal-900 px-6 py-3.5 font-semibold text-white transition hover:bg-royal-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            >
+              {status === "loading" ? (
+                <>
+                  <LoaderCircle size={19} className="animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  Send Message
+                </>
+              )}
+            </button>
+
+            <p className="text-xs leading-5 text-slate-500">
+              Fields marked with * are required. Please do not share passwords,
+              OTPs, or other sensitive payment credentials.
+            </p>
+          </form>
+        </div>
+      </section>
     </>
   );
 }
+
 
 export function FaqPage() {
   return (

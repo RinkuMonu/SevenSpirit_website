@@ -24,9 +24,9 @@ export default function Footer() {
           </div> */}
         </div>
         {COL('Explore', [['/about', 'About'], ['/astrologers', 'Astrologers'], ['/services', 'Services'], ['/contact', 'Contact']])}
-        {COL('Policies', [['/terms', 'Terms & Conditions'], ['/privacy', 'Privacy Policy'], ['/refund', 'Refund Policy'], ['/disclaimer', 'Disclaimer']])}
+        {COL('Policies', [['/terms', 'Terms & Conditions'], ['/privacy', 'Privacy Policy'], ['/refund', 'Refund Policy'], ['/cancellation', 'Cancellation Policy']])}
         {COL('Help', [['/faq', 'FAQ'], ['/login', 'Login'], ['/register', 'Create account']])}
-        {COL('Legal', [['/cancellation', 'Cancellation Policy']])}
+        
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs text-white/60">
         © {new Date().getFullYear()} SevenSpirit. Astrology is offered for guidance and entertainment and is not a substitute for professional medical, legal or financial advice.

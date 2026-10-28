@@ -85,7 +85,7 @@ export function WhyUs() {
 export function Testimonials() {
   return (
     <section className="bg-white py-16">
-      <div className="container-x">
+      {/* <div className="container-x">
         <Heading title="What our customers say" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {TESTIMONIALS.map((t) => (
@@ -99,7 +99,7 @@ export function Testimonials() {
             </figure>
           ))}
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }
